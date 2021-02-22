@@ -1,11 +1,13 @@
 package View;
 
+import java.io.Console;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import Behavior.BillManagement;
 import Behavior.CustomerManagement;
+import Behavior.Password;
 import Behavior.ProductManagement;
 import Entity.Bill;
 import Entity.Customer;
@@ -16,6 +18,8 @@ public class Main {
 	static ProductManagement pm = new ProductManagement();
 	static BillManagement bm = new BillManagement();
 	static CustomerManagement cm = new CustomerManagement();
+	static Console console = System.console();
+	static Password p = new Password();
 	
 	public static void showProductManagementMenu() {
 		System.out.println("___ Product Management ____");
@@ -185,9 +189,29 @@ public class Main {
 		
 	}
 	
+	public static void logIn() throws IOException {
+        boolean notRegistered = true;
+        while (notRegistered) {
+              System.out.println("Enter username");
+              String userName = sc.nextLine();
+              System.out.println("Enter password");
+              String userPassword = new String(console.readPassword());
+              if (userName.equals("admin")) {
+                    if (p.validatePassword(userPassword)) {
+                          notRegistered = false;
+                          System.out.println("Successfully Logged In");
+                          showMenu();
+                    }
+              }
+              else {
+                    System.out.println("Incorrect UserName or Password");
+              }
+        }
+  }
+	
 	public static void main(String[] args) throws IOException {
 		pm.createFile();
 		cm.createFile();
-		showMenu();
+		logIn();
 	}
 }
